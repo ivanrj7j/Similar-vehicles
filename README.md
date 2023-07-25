@@ -67,23 +67,74 @@ This Model used `Categorical Cross Entropy` Loss to learn with an `adam` optimiz
 
 ## Installation
 
-[Will add installation instructions here later]
+### You first need to install Tensorflow
+
+#### To install TensorFlow using `pip`, run the following command:
+```sh
+pip install tensorflow
+```
+
+#### To install TensorFlow using `conda`, run the following command:
+```sh
+conda install tensorflow
+```
+
+### Then you have to download the model
+
+Download The model [here](https://github.com/ivanrj7j/Similar-vehicles/releases/download/1.0/similarityModel.h5)
+
+Then paste it in your project folder.
 
 ## Usage
 
-[Will add usage instructions here later]
+To use the model
 
-## Dataset
+```py
+import tensorflow as tf
+from tensorflow import keras
+from keras.models import load_model
+from keras.utils import load_img
 
-[Will add information about the dataset used for training and evaluation here]
+#load dependencies
+
+model = load_model('model.h5')
+# loading the model 
+
+def predict(image:str, model:keras.models.Model):
+    img = tf.convert_to_tensor(Image.open(image).resize((256, 256)))
+    prediction = model.predict(tf.expand_dims(img, 0), verbose=False)
+    return prediction
+
+def predict_multiple(images:list[str], model:keras.models.Model):
+    imagesTensor = []
+    for img in images:
+        imagesTensor.append(tf.convert_to_tensor(Image.open(img).resize((256, 256))))
+    imagesTensor = tf.stack(imagesTensor)
+    
+    return model.predict(imagesTensor, verbose=False)
+
+def find_similar(target:str, dataset:list[str], model:keras.models.Model):
+    targetVector = predict(target, model)
+    dataMatrix = predict_multiple(dataset, model)
+
+    similarity = cosine_similarity(targetVector, dataMatrix)[0]
+
+    print(similarity)
+
+    dataset = zip(dataset, similarity.tolist())
+
+    return sorted(dataset, key=lambda x: x[1], reverse=True)
+
+find_similar('image/path', ['list', 'of', 'images', 'path', 'to', 'compare', 'similarity'], model)
+```
 
 ## Training
 
-[Will add information about the training process here]
+The Model was trained with only 5 epochs
 
 ## Evaluation
 
-[Will add information about the evaluation process and metrics here]
+The model Performed Exceptionally well it training and testing
 
 ## Results
 
@@ -91,7 +142,7 @@ This Model used `Categorical Cross Entropy` Loss to learn with an `adam` optimiz
 
 ## Contributing
 
-[Will add guidelines for contributing to the project here]
+You can give your comments in the discussions section or you can email me at `ivanrj7j@gmail.com`, you can also fork this repo if you want.
 
 ## License
 
