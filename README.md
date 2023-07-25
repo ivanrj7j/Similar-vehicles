@@ -17,6 +17,8 @@ _Thank you for your interest in my Image Similarity AI Model project, and let's 
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Data](#data)
+- [Preprocessing](#preprocessing)
 - [Architecture](#architecture)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -27,9 +29,41 @@ _Thank you for your interest in my Image Similarity AI Model project, and let's 
 - [Contributing](#contributing)
 - [License](#license)
 
+## Data
+
+The images were downloaded using [Download All Images](https://chrome.google.com/webstore/detail/download-all-images/ifipmflagepipjokmbdecpmjbibjnakm)
+
+## Preprocessing
+
+The Data was First Augmented using Albumentations Pipeline.
+
+The below filters were applied to Images to augment them:
+- Horizontal Flip
+- Random Brightness Contrast
+- Random Rotate 90
+- Flip
+- RGB Shift
+- Hue Saturation Value
+- CLAHE
+- Random Gamma
+- Blur
+- To Gray
+- Image Compression
+
+The image was splitted into Train-Test-Valid sets with `75:10:15` ratio
+
 ## Architecture
 
-[Provide an overview of the project's architecture here]
+This model uses a Convolutional Layers of [MobileNet](https://keras.io/api/applications/mobilenet/)
+
+and then adds
+
+- Global Flatten Layer
+- Dense Layer with `512` outputs and ReLU activation
+- Dense Layer with `64` outputs and ReLU activation
+- Dense Layer with 1 output and Sigmoid activation
+
+This Model used `Categorical Cross Entropy` Loss to learn with an `adam` optimizer
 
 ## Installation
 
